@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /
+# Change to 'Allow: /' and remove X-Robots-Tag in vercel.json once real business details are in.
