@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>First Salary Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: top bar + tab strip + one working area; tables scroll inside their own box. Single light brand theme. */
+:root{
+  --navy:#1A1E2C;--coral:#EE6457;--warm:#FC9169;--peach:#FDD0AB;--slate:#564655;--cream:#FEFCFA;--soft:#FBE9D2;--white:#fff;
+  --line:#EFE3D5;--muted:#8A7C88;--ok:#2F8F5B;--okbg:#E6F4EC;--warn:#B7791F;--warnbg:#FDF3DC;--bad:#A33A35;--badbg:#FDECEA;
+  --f:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:light
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--navy);font:14.5px/1.5 var(--f)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+h1,h2,h3{margin:0;letter-spacing:-.02em}
+p{margin:0}
+.top{position:sticky;top:0;z-index:10;background:rgba(254,252,250,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+.top-in{display:flex;align-items:center;gap:12px;padding:12px 20px;max-width:1320px;margin:0 auto}
+.logo{font-weight:800;font-size:18px;text-decoration:none;color:var(--navy)}.logo span{font-weight:400;color:var(--slate)}
+.tag{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--navy);color:#fff}
+.grow{flex:1}
+.wrap{max-width:1320px;margin:0 auto;padding:18px 20px 64px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tab{border:1.5px solid var(--line);background:var(--white);border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.card+.card{margin-top:14px}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.ch h2{font-size:18px}
+.btn{border:0;border-radius:10px;padding:8px 14px;font-weight:800;background:var(--coral);color:#fff;cursor:pointer}
+.btn:hover{background:#E0544A}.btn[disabled]{background:#E9DDD3;color:#A2949F;cursor:not-allowed}
+.btn.ghost{background:var(--white);color:var(--navy);border:1.5px solid var(--line)}.btn.ghost:hover{border-color:var(--coral);color:var(--coral)}
+.btn.ok{background:var(--ok)}.btn.bad{background:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:8px}
+.linkbtn{background:none;border:0;font-weight:700;color:var(--slate);cursor:pointer;padding:6px}
+.linkbtn:hover{color:var(--coral)}
+input,select,textarea{border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--white);width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--coral)}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:700;color:var(--slate)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:end}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.click{cursor:pointer}tr.click:hover td{background:#FFF8F2}
+.num{font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.p-ok{background:var(--okbg);color:var(--ok)}.p-warn{background:var(--warnbg);color:var(--warn)}.p-bad{background:var(--badbg);color:var(--bad)}.p-soft{background:var(--soft);color:var(--slate)}
+.muted{color:var(--muted)}.slate{color:var(--slate)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi b{display:block;font-size:26px;font-weight:800;letter-spacing:-.02em}
+.kpi span{font-size:12.5px;color:var(--muted)}
+.drawer{position:fixed;inset:0;background:rgba(26,30,44,.45);z-index:30;display:flex;justify-content:flex-end}
+.drawer .pane{background:var(--cream);width:min(640px,100%);height:100%;overflow:auto;padding:20px}
+.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 12px;font-size:13.5px}
+.kv dt{color:var(--muted)}.kv dd{margin:0}
+.doc{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;z-index:50}
+.login{max-width:420px;margin:60px auto;padding:0 16px}
+.err{background:var(--badbg);color:var(--bad);padding:10px 12px;border-radius:10px;font-weight:600}
+.split{display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px}
+@media (max-width:820px){.split{grid-template-columns:1fr}}
+.list button{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600}
+.list button[aria-current="true"]{background:var(--navy);color:#fff}
+.list button:hover:not([aria-current="true"]){background:var(--soft)}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in"><a class="logo" href="/">First <span>Salary</span></a><span class="tag">Admin</span><span class="grow"></span><span id="who" class="muted"></span><button class="linkbtn" id="logout" hidden>Log out</button></div></header>
+<div id="app" class="wrap"><p class="muted">Loading…</p></div>
+<script src="../assets/supabase.js"></script>
+<script>
+(function(){
+  var CFG={url:"https://gftdncrmvxnrfgizkqsi.supabase.co",key:"sb_publishable_oLNmDnUiJIBJTxoeXgOU5A_-AJeItjD"};
+  var TRACKS=[["relationship","Relationship Management"],["banking-sales","Banking Sales"],["lending","Lending & Loans"],["insurance","Insurance"],["wealth","Wealth & Mutual Funds"],["broking","Stock Broking"],["fintech","Fintech & Digital Payments"],["pharma","Pharma Sales"],["collections","Collections & Recovery"]];
+  var sb=window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  var app=document.getElementById("app"),user=null,tab="students",S={};
+  var auth={email:"",sent:false,err:"",busy:false};
+  function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function tname(id){for(var i=0;i<TRACKS.length;i++)if(TRACKS[i][0]===id)return TRACKS[i][1];return id||"—"}
+  function toast(m){var t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},2600)}
+  function must(r){if(r.error)throw r.error;return r.data}
+  function fail(e){toast((e&&e.message)||String(e))}
+  function isAdmin(){return !!(user&&user.app_metadata&&user.app_metadata.role==="admin")}
+  function dt(s){return s?new Date(s).toLocaleString("en-IN",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"}):"—"}
+  function kycPill(s){return '<span class="pill '+({verified:"p-ok",submitted:"p-warn",rejected:"p-bad"}[s]||"p-soft")+'">'+esc(s||"pending")+'</span>'}
+  function trackOptions(sel,blank){return (blank?'<option value="">'+blank+'</option>':'')+TRACKS.map(function(t){return '<option value="'+t[0]+'"'+(t[0]===sel?" selected":"")+'>'+esc(t[1])+'</option>'}).join("")}
+
+  /* ---------- auth ---------- */
+  function vLogin(){
+    app.innerHTML='<div class="login"><div class="card"><h2 style="font-size:22px">Admin login</h2><p class="slate" style="margin:6px 0 14px">'+(auth.sent?"Enter the code sent to <b>"+esc(auth.email)+"</b>, or tap the link in the email.":"Sign in with your admin email.")+'</p>'+
+      '<form id="auth" style="display:grid;gap:12px">'+(auth.sent?'<label class="f">One-time code<input id="code" inputmode="numeric" autocomplete="one-time-code" required></label>':'<label class="f">Email<input id="email" type="email" autocomplete="email" value="'+esc(auth.email)+'" required></label>')+
+      (auth.err?'<p class="err">'+esc(auth.err)+'</p>':'')+'<button class="btn" type="submit"'+(auth.busy?" disabled":"")+'>'+(auth.busy?"Please wait…":auth.sent?"Verify":"Send code")+'</button>'+
+      (auth.sent?'<button type="button" class="linkbtn" id="back">Use a different email</button>':'')+'</form></div></div>';
+    document.getElementById("auth").onsubmit=function(e){e.preventDefault();auth.err="";auth.busy=true;
+      if(!auth.sent){auth.email=document.getElementById("email").value.trim();vLogin();
+        sb.auth.signInWithOtp({email:auth.email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+"/admin/"}}).then(must).then(function(){auth.sent=true;auth.busy=false;vLogin()}).catch(function(err){auth.busy=false;auth.err=err.message;vLogin()})}
+      else{var c=document.getElementById("code").value.trim();vLogin();
+        sb.auth.verifyOtp({email:auth.email,token:c,type:"email"}).then(must).then(function(){auth.busy=false}).catch(function(err){auth.busy=false;auth.err=err.message;vLogin()})}};
+    var b=document.getElementById("back");if(b)b.onclick=function(){auth.sent=false;vLogin()};
+  }
+  document.getElementById("logout").onclick=function(){sb.auth.signOut()};
+  sb.auth.onAuthStateChange(function(ev,session){user=session?session.user:null;boot()});
+
+  function boot(){
+    document.getElementById("who").textContent=user?user.email:"";document.getElementById("logout").hidden=!user;
+    if(!user)return vLogin();
+    if(!isAdmin()){app.innerHTML='<div class="login"><div class="card"><h2>No admin access</h2><p class="slate" style="margin-top:6px">'+esc(user.email)+' is not an admin. Ask an existing admin to add your email, then sign out and in again.</p></div></div>';return}
+    render();
+  }
+
+  /* ---------- shell ---------- */
+  var TABS=[["students","Students"],["kyc","KYC review"],["cohorts","Cohorts"],["talks","Talks"],["drives","Drives"],["content","Content"]];
+  function render(){
+    app.innerHTML='<div class="tabs" role="tablist">'+TABS.map(function(t){return '<button class="tab" role="tab" data-tab="'+t[0]+'" aria-selected="'+(t[0]===tab)+'">'+t[1]+'</button>'}).join("")+'</div><div id="view"><p class="muted">Loading…</p></div>';
+    app.querySelectorAll("[data-tab]").forEach(function(b){b.onclick=function(){tab=b.getAttribute("data-tab");render()}});
+    ({students:tStudents,kyc:tKyc,cohorts:tCohorts,talks:tTalks,drives:tDrives,content:tContent})[tab]().catch(function(e){document.getElementById("view").innerHTML='<p class="err">'+esc(e.message||e)+'</p>'});
+  }
+  function V(html){document.getElementById("view").innerHTML=html}
+
+  /* ---------- students ---------- */
+  var q="";
+  function tStudents(){
+    return Promise.all([sb.rpc("admin_students").then(must),sb.from("cohorts").select("id,name").order("created_at").then(must)]).then(function(r){
+      S.students=r[0]||[];S.cohorts=r[1]||[];drawStudents()});
+  }
+  function drawStudents(){
+    var rows=S.students.filter(function(s){var t=(s.full_name+" "+s.email+" "+s.city+" "+s.college).toLowerCase();return !q||t.indexOf(q.toLowerCase())>=0});
+    var onb=S.students.filter(function(s){return s.onboarding_step>=4}).length,kv=S.students.filter(function(s){return s.kyc_status==="submitted"}).length,cert=S.students.filter(function(s){return (s.final_percent||0)>=70}).length;
+    V('<div class="kpis"><div class="kpi"><b class="num">'+S.students.length+'</b><span>Students signed up</span></div><div class="kpi"><b class="num">'+onb+'</b><span>Finished onboarding</span></div><div class="kpi"><b class="num">'+kv+'</b><span>KYC waiting for review</span></div><div class="kpi"><b class="num">'+cert+'</b><span>Passed the final test</span></div></div>'+
+      '<div class="card"><div class="ch"><h2>Students</h2><input id="q" placeholder="Search name, email, city, college" style="max-width:320px" value="'+esc(q)+'"></div><div class="tbl"><table><thead><tr><th>Student</th><th>Track</th><th>Setup</th><th>KYC</th><th>Aptitude</th><th>Lessons</th><th>Modules</th><th>Final</th><th>Cohort</th><th>Last active</th></tr></thead><tbody>'+
+      (rows.map(function(s){return '<tr class="click" data-id="'+s.id+'"><td><b>'+esc(s.full_name||"(no name)")+'</b><br><span class="muted">'+esc(s.email)+'</span></td><td>'+esc(tname(s.active_track))+'</td><td>'+(s.onboarding_step>=4?'<span class="pill p-ok">Done</span>':'Step '+(s.onboarding_step+1)+'/4')+'</td><td>'+kycPill(s.kyc_status)+'</td><td class="num">'+(s.aptitude_score==null?"—":s.aptitude_score)+'</td><td class="num">'+s.lessons_done+'</td><td class="num">'+s.modules_passed+'</td><td class="num">'+(s.final_percent==null?"—":s.final_percent+"%")+'</td><td>'+esc(s.cohort||"—")+'</td><td>'+esc(s.last_active||"—")+'</td></tr>'}).join("")||'<tr><td colspan="10" class="muted">No students yet.</td></tr>')+
+      '</tbody></table></div></div>');
+    var qi=document.getElementById("q");qi.oninput=function(){q=qi.value;var p=qi.selectionStart;drawStudents();var n=document.getElementById("q");n.focus();n.setSelectionRange(p,p)};
+    document.querySelectorAll("tr[data-id]").forEach(function(tr){tr.onclick=function(){openStudent(tr.getAttribute("data-id"))}});
+  }
+  function openStudent(id){
+    Promise.all([sb.from("students").select("*").eq("id",id).single().then(must),sb.from("kyc_documents").select("*").eq("student_id",id).then(must)]).then(function(r){
+      var s=r[0],docs=r[1]||[];
+      var d=document.createElement("div");d.className="drawer";
+      d.innerHTML='<div class="pane" role="dialog" aria-modal="true" aria-label="Student details"><div class="ch"><h2>'+esc(s.full_name||s.email)+'</h2><button class="linkbtn" data-x>Close</button></div>'+
+        '<div class="card"><dl class="kv"><dt>Email</dt><dd>'+esc(s.email)+'</dd><dt>Mobile</dt><dd>'+esc(s.mobile||"—")+'</dd><dt>Degree</dt><dd>'+esc((s.degree||"—")+" · "+(s.degree_status||"")+" "+(s.grad_year||""))+'</dd><dt>College</dt><dd>'+esc(s.college||"—")+'</dd><dt>City</dt><dd>'+esc(s.city||"—")+'</dd><dt>Tracks</dt><dd>'+esc((s.preferred_tracks||[]).map(tname).join(", ")||"—")+'</dd><dt>Skills</dt><dd>'+esc((s.skills||[]).join(", ")||"—")+'</dd><dt>Interests</dt><dd>'+esc((s.interests||[]).join(", ")||"—")+'</dd><dt>Terms accepted</dt><dd>'+dt(s.terms_accepted_at)+'</dd><dt>Joined</dt><dd>'+dt(s.created_at)+'</dd></dl></div>'+
+        '<div class="card"><div class="ch"><h2>KYC documents</h2>'+kycPill(s.kyc_status)+'</div>'+(["aadhaar","pan","marksheet"].map(function(t){var x=docs.filter(function(y){return y.doc_type===t})[0];
+          return '<div class="doc"><div><b style="text-transform:capitalize">'+t+'</b><br><span class="muted">'+(x?esc((x.source==="digilocker"?"DigiLocker (placeholder)":x.file_name)+" · "+dt(x.created_at)):"Not submitted")+'</span>'+(x&&x.note?'<br><span class="muted">Note: '+esc(x.note)+'</span>':'')+'</div>'+
+          (x?'<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+kycPill(x.status)+(x.storage_path?'<button class="btn ghost sm" data-view="'+esc(x.storage_path)+'">View</button>':'')+'<button class="btn ok sm" data-doc="'+x.id+'" data-st="verified">Verify</button><button class="btn bad sm" data-doc="'+x.id+'" data-st="rejected">Reject</button></div>':'')+'</div>'}).join(""))+'</div>'+
+        '<div class="card"><div class="ch"><h2>Cohort</h2></div><div class="form"><label class="f">Assign cohort<select id="coh"><option value="">No cohort</option>'+S.cohorts.map(function(c){return '<option value="'+c.id+'"'+(c.id===s.cohort_id?" selected":"")+'>'+esc(c.name)+'</option>'}).join("")+'</select></label><button class="btn" id="savecoh">Save</button></div></div></div>';
+      document.body.appendChild(d);
+      function close(){d.remove()}
+      d.onclick=function(e){if(e.target===d||e.target.hasAttribute("data-x"))close()};
+      d.querySelectorAll("[data-view]").forEach(function(b){b.onclick=function(){sb.storage.from("kyc").createSignedUrl(b.getAttribute("data-view"),120).then(must).then(function(r){window.open(r.signedUrl,"_blank","noopener")}).catch(fail)}});
+      d.querySelectorAll("[data-doc]").forEach(function(b){b.onclick=function(){var st=b.getAttribute("data-st"),note=null;
+        if(st==="rejected"){var inp=prompt("Reason for rejection (shown to the student)");note=inp||"Please re-upload a clear copy"}
+        sb.from("kyc_documents").update({status:st,note:note,reviewed_at:new Date().toISOString()}).eq("id",b.getAttribute("data-doc")).then(must).then(function(){toast("Document "+st);close();openStudent(id);tStudents()}).catch(fail)}});
+      d.querySelector("#savecoh").onclick=function(){sb.from("students").update({cohort_id:d.querySelector("#coh").value||null}).eq("id",id).then(must).then(function(){toast("Cohort saved");close();tStudents()}).catch(fail)};
+    }).catch(fail);
+  }
+
+  /* ---------- KYC queue ---------- */
+  function tKyc(){
+    return sb.from("kyc_documents").select("*, students(full_name,email)").eq("status","pending").order("created_at").then(must).then(function(rows){
+      V('<div class="card"><div class="ch"><h2>Documents waiting for review</h2><span class="pill p-soft">'+rows.length+'</span></div><div class="tbl"><table><thead><tr><th>Student</th><th>Document</th><th>Source</th><th>Submitted</th><th></th></tr></thead><tbody>'+
+        (rows.map(function(x){return '<tr><td><b>'+esc(x.students&&x.students.full_name||"(no name)")+'</b><br><span class="muted">'+esc(x.students&&x.students.email)+'</span></td><td style="text-transform:capitalize">'+x.doc_type+'</td><td>'+esc(x.source==="digilocker"?"DigiLocker (placeholder)":x.file_name)+'</td><td>'+dt(x.created_at)+'</td><td style="white-space:nowrap">'+(x.storage_path?'<button class="btn ghost sm" data-view="'+esc(x.storage_path)+'">View</button> ':'')+'<button class="btn ok sm" data-doc="'+x.id+'" data-st="verified">Verify</button> <button class="btn bad sm" data-doc="'+x.id+'" data-st="rejected">Reject</button></td></tr>'}).join("")||'<tr><td colspan="5" class="muted">Nothing to review.</td></tr>')+'</tbody></table></div></div>');
+      document.querySelectorAll("[data-view]").forEach(function(b){b.onclick=function(){sb.storage.from("kyc").createSignedUrl(b.getAttribute("data-view"),120).then(must).then(function(r){window.open(r.signedUrl,"_blank","noopener")}).catch(fail)}});
+      document.querySelectorAll("[data-doc]").forEach(function(b){b.onclick=function(){var st=b.getAttribute("data-st"),note=null;if(st==="rejected")note=prompt("Reason for rejection (shown to the student)")||"Please re-upload a clear copy";
+        sb.from("kyc_documents").update({status:st,note:note,reviewed_at:new Date().toISOString()}).eq("id",b.getAttribute("data-doc")).then(must).then(function(){toast("Document "+st);tKyc()}).catch(fail)}});
+    });
+  }
+
+  /* ---------- cohorts ---------- */
+  function tCohorts(){
+    return Promise.all([sb.from("cohorts").select("*").order("created_at",{ascending:false}).then(must),sb.from("students").select("cohort_id").not("cohort_id","is",null).then(must)]).then(function(r){
+      var cnt={};(r[1]||[]).forEach(function(x){cnt[x.cohort_id]=(cnt[x.cohort_id]||0)+1});
+      V('<div class="card"><div class="ch"><h2>New cohort</h2></div><form id="nc" class="form"><label class="f">Name<input name="name" placeholder="RM-NOV26-1" required></label><label class="f">Track<select name="track_id">'+trackOptions("relationship")+'</select></label><label class="f">Starts on<input name="starts_on" type="date"></label><button class="btn">Create cohort</button></form><p class="muted" style="margin-top:8px">Students who pass the final test join the oldest forming cohort on their track automatically, or a new one is created.</p></div>'+
+        '<div class="card"><div class="ch"><h2>Cohorts</h2></div><div class="tbl"><table><thead><tr><th>Name</th><th>Track</th><th>Students</th><th>Starts</th><th>Status</th></tr></thead><tbody>'+
+        ((r[0]||[]).map(function(c){return '<tr><td><b>'+esc(c.name)+'</b></td><td>'+esc(tname(c.track_id))+'</td><td class="num">'+(cnt[c.id]||0)+'</td><td>'+esc(c.starts_on||"—")+'</td><td><select data-c="'+c.id+'" style="max-width:140px">'+["forming","active","closed"].map(function(s){return '<option'+(s===c.status?" selected":"")+'>'+s+'</option>'}).join("")+'</select></td></tr>'}).join("")||'<tr><td colspan="5" class="muted">No cohorts yet.</td></tr>')+'</tbody></table></div></div>');
+      document.getElementById("nc").onsubmit=function(e){e.preventDefault();var f=new FormData(e.target);sb.from("cohorts").insert({name:f.get("name"),track_id:f.get("track_id"),starts_on:f.get("starts_on")||null}).then(must).then(function(){toast("Cohort created");tCohorts()}).catch(fail)};
+      document.querySelectorAll("[data-c]").forEach(function(s){s.onchange=function(){sb.from("cohorts").update({status:s.value}).eq("id",s.getAttribute("data-c")).then(must).then(function(){toast("Status updated")}).catch(fail)}});
+    });
+  }
+
+  /* ---------- talks ---------- */
+  function tTalks(){
+    return Promise.all([sb.from("talks").select("*").order("starts_at",{ascending:false}).then(must),sb.from("talk_registrations").select("talk_id").then(must)]).then(function(r){
+      var cnt={};(r[1]||[]).forEach(function(x){cnt[x.talk_id]=(cnt[x.talk_id]||0)+1});
+      V('<div class="card"><div class="ch"><h2>New pre-placement talk</h2></div><form id="nt" class="form"><label class="f">Company<input name="company" required></label><label class="f">Title<input name="title" required></label><label class="f">Starts at<input name="starts_at" type="datetime-local" required></label><label class="f">Join link<input name="join_url" type="url" placeholder="https://"></label><button class="btn">Add talk</button></form></div>'+
+        '<div class="card"><div class="ch"><h2>Talks</h2></div><div class="tbl"><table><thead><tr><th>Talk</th><th>When</th><th>Registered</th><th>Visible</th><th></th></tr></thead><tbody>'+
+        ((r[0]||[]).map(function(t){return '<tr><td><b>'+esc(t.title)+'</b><br><span class="muted">'+esc(t.company)+(t.join_url?' · '+esc(t.join_url):'')+'</span></td><td>'+dt(t.starts_at)+'</td><td class="num">'+(cnt[t.id]||0)+'</td><td><input type="checkbox" data-pub="'+t.id+'"'+(t.published?" checked":"")+' style="width:auto"></td><td><button class="btn ghost sm" data-del="'+t.id+'">Delete</button></td></tr>'}).join("")||'<tr><td colspan="5" class="muted">No talks yet.</td></tr>')+'</tbody></table></div></div>');
+      document.getElementById("nt").onsubmit=function(e){e.preventDefault();var f=new FormData(e.target);sb.from("talks").insert({company:f.get("company"),title:f.get("title"),starts_at:new Date(f.get("starts_at")).toISOString(),join_url:f.get("join_url")||null}).then(must).then(function(){toast("Talk added");tTalks()}).catch(fail)};
+      document.querySelectorAll("[data-pub]").forEach(function(c){c.onchange=function(){sb.from("talks").update({published:c.checked}).eq("id",c.getAttribute("data-pub")).then(must).then(function(){toast(c.checked?"Talk visible":"Talk hidden")}).catch(fail)}});
+      document.querySelectorAll("[data-del]").forEach(function(b){b.onclick=function(){if(b.textContent!=="Confirm delete"){b.textContent="Confirm delete";return}sb.from("talks").delete().eq("id",b.getAttribute("data-del")).then(must).then(function(){toast("Talk deleted");tTalks()}).catch(fail)}});
+    });
+  }
+
+  /* ---------- drives ---------- */
+  function tDrives(){
+    return Promise.all([sb.from("drives").select("*").order("created_at",{ascending:false}).then(must),sb.from("cohorts").select("id,name").then(must),sb.from("drive_applications").select("*, students(full_name,email)").then(must)]).then(function(r){
+      var cohorts=r[1]||[],apps=r[2]||[];function cname(id){var c=cohorts.filter(function(x){return x.id===id})[0];return c?c.name:"All cohorts"}
+      V('<div class="card"><div class="ch"><h2>New placement drive</h2></div><form id="nd" class="form"><label class="f">Company<input name="company" required></label><label class="f">Role<input name="role" required></label><label class="f">Location<input name="location"></label><label class="f">Track<select name="track_id">'+trackOptions("","All tracks")+'</select></label><label class="f">Cohort<select name="cohort_id"><option value="">All cohorts</option>'+cohorts.map(function(c){return '<option value="'+c.id+'">'+esc(c.name)+'</option>'}).join("")+'</select></label><label class="f">Drive date<input name="drive_date" type="date"></label><button class="btn">Add drive</button></form><p class="muted" style="margin-top:8px">Students see open drives only after they join a cohort.</p></div>'+
+        (r[0]||[]).map(function(d){var a=apps.filter(function(x){return x.drive_id===d.id});
+          return '<div class="card"><div class="ch"><div><h2>'+esc(d.role)+' · '+esc(d.company)+'</h2><span class="muted">'+esc(d.location||"")+' · '+esc(tname(d.track_id)==="—"?"All tracks":tname(d.track_id))+' · '+esc(cname(d.cohort_id))+(d.drive_date?' · '+esc(d.drive_date):'')+'</span></div><select data-ds="'+d.id+'" style="max-width:130px">'+["draft","open","closed"].map(function(s){return '<option'+(s===d.status?" selected":"")+'>'+s+'</option>'}).join("")+'</select></div>'+
+            (a.length?'<div class="tbl"><table><thead><tr><th>Applicant</th><th>Applied</th><th>Status</th></tr></thead><tbody>'+a.map(function(x){return '<tr><td><b>'+esc(x.students&&x.students.full_name||"(no name)")+'</b><br><span class="muted">'+esc(x.students&&x.students.email)+'</span></td><td>'+dt(x.created_at)+'</td><td><select data-app="'+d.id+'|'+x.student_id+'" style="max-width:150px">'+["applied","shortlisted","interview","offered","rejected","withdrawn"].map(function(s){return '<option'+(s===x.status?" selected":"")+'>'+s+'</option>'}).join("")+'</select></td></tr>'}).join("")+'</tbody></table></div>':'<p class="muted">No applications yet.</p>')+'</div>'}).join(""));
+      document.getElementById("nd").onsubmit=function(e){e.preventDefault();var f=new FormData(e.target);sb.from("drives").insert({company:f.get("company"),role:f.get("role"),location:f.get("location")||null,track_id:f.get("track_id")||null,cohort_id:f.get("cohort_id")||null,drive_date:f.get("drive_date")||null}).then(must).then(function(){toast("Drive added");tDrives()}).catch(fail)};
+      document.querySelectorAll("[data-ds]").forEach(function(s){s.onchange=function(){sb.from("drives").update({status:s.value}).eq("id",s.getAttribute("data-ds")).then(must).then(function(){toast("Drive "+s.value)}).catch(fail)}});
+      document.querySelectorAll("[data-app]").forEach(function(s){s.onchange=function(){var k=s.getAttribute("data-app").split("|");sb.from("drive_applications").update({status:s.value}).eq("drive_id",k[0]).eq("student_id",k[1]).then(must).then(function(){toast("Application "+s.value)}).catch(fail)}});
+    });
+  }
+
+  /* ---------- content ---------- */
+  var cTrack="relationship",cMod=null;
+  function tContent(){
+    return sb.from("modules").select("id,position,title,description,lessons(id,position,title,video_url,duration_min)").eq("track_id",cTrack).order("position").then(must).then(function(mods){
+      mods.forEach(function(m){m.lessons.sort(function(a,b){return a.position-b.position})});
+      if(!cMod||!mods.some(function(m){return m.id===cMod}))cMod=mods[0]&&mods[0].id;
+      var m=mods.filter(function(x){return x.id===cMod})[0];
+      var qsP=m?sb.from("questions").select("*").eq("module_id",m.id).order("position").then(must):Promise.resolve([]);
+      var sharedP=sb.from("questions").select("*").is("module_id",null).order("quiz_kind").order("position").then(must);
+      return Promise.all([qsP,sharedP]).then(function(r){var qs=r[0]||[],shared=r[1]||[];
+        V('<div class="card"><div class="form" style="grid-template-columns:minmax(200px,320px)"><label class="f">Track<select id="ct">'+trackOptions(cTrack)+'</select></label></div></div>'+
+          '<div class="split" style="margin-top:14px"><div class="card list">'+mods.map(function(x){return '<button data-m="'+x.id+'" aria-current="'+(x.id===cMod)+'">'+x.position+'. '+esc(x.title)+'</button>'}).join("")+'</div><div>'+
+          (m?'<div class="card"><div class="ch"><h2>Module '+m.position+'</h2></div><form id="mf" class="form"><label class="f">Title<input name="title" value="'+esc(m.title)+'" required></label><label class="f">Short description<input name="description" value="'+esc(m.description||"")+'"></label><button class="btn">Save module</button></form></div>'+
+            '<div class="card"><div class="ch"><h2>Lessons</h2></div>'+m.lessons.map(function(l){return '<form class="form lf" data-l="'+l.id+'" style="margin-bottom:10px"><label class="f">Lesson '+m.position+'.'+l.position+'<input name="title" value="'+esc(l.title)+'" required></label><label class="f">Video link<input name="video_url" type="url" value="'+esc(l.video_url||"")+'" placeholder="https://"></label><label class="f">Minutes<input name="duration_min" type="number" min="1" max="600" value="'+(l.duration_min||"")+'"></label><button class="btn ghost">Save</button></form>'}).join("")+
+              '<form id="nl" class="form" style="border-top:1px dashed var(--line);padding-top:12px"><label class="f">New lesson title<input name="title" required></label><button class="btn">Add lesson</button></form></div>'+
+            '<div class="card"><div class="ch"><h2>Quiz questions for this module</h2><span class="muted">'+(qs.length?qs.length+" questions":"Using the shared sample questions until you add some")+'</span></div>'+qList(qs)+qForm("module")+'</div>':'<p class="muted">No modules.</p>')+
+          '<div class="card"><div class="ch"><h2>Aptitude, shared module and final questions</h2></div>'+qList(shared,true)+qForm("shared")+'</div></div></div>');
+        document.getElementById("ct").onchange=function(e){cTrack=e.target.value;cMod=null;tContent()};
+        document.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){cMod=b.getAttribute("data-m");tContent()}});
+        var mf=document.getElementById("mf");if(mf)mf.onsubmit=function(e){e.preventDefault();var f=new FormData(mf);sb.from("modules").update({title:f.get("title"),description:f.get("description")}).eq("id",m.id).then(must).then(function(){toast("Module saved");tContent()}).catch(fail)};
+        document.querySelectorAll("form.lf").forEach(function(fm){fm.onsubmit=function(e){e.preventDefault();var f=new FormData(fm);sb.from("lessons").update({title:f.get("title"),video_url:f.get("video_url")||null,duration_min:f.get("duration_min")?+f.get("duration_min"):null}).eq("id",fm.getAttribute("data-l")).then(must).then(function(){toast("Lesson saved")}).catch(fail)}});
+        var nl=document.getElementById("nl");if(nl)nl.onsubmit=function(e){e.preventDefault();var f=new FormData(nl);sb.from("lessons").insert({module_id:m.id,position:(m.lessons.length?m.lessons[m.lessons.length-1].position:0)+1,title:f.get("title"),duration_min:25}).then(must).then(function(){toast("Lesson added");tContent()}).catch(fail)};
+        document.querySelectorAll("form.qf").forEach(function(fm){fm.onsubmit=function(e){e.preventDefault();var f=new FormData(fm),opts=String(f.get("options")).split("\n").map(function(s){return s.trim()}).filter(Boolean),ci=+f.get("correct")-1;
+          if(opts.length<2||ci<0||ci>=opts.length){toast("Give at least 2 options and a valid correct option number");return}
+          var kind=fm.getAttribute("data-kind")==="module"?"module":f.get("kind");
+          sb.from("questions").insert({quiz_kind:kind,module_id:fm.getAttribute("data-kind")==="module"?m.id:null,track_id:kind==="final"&&f.get("track")?f.get("track"):null,position:99,prompt:f.get("prompt"),options:opts,correct_index:ci}).then(must).then(function(){toast("Question added");tContent()}).catch(fail)}});
+        document.querySelectorAll("[data-qdel]").forEach(function(b){b.onclick=function(){if(b.textContent!=="Confirm"){b.textContent="Confirm";return}sb.from("questions").delete().eq("id",b.getAttribute("data-qdel")).then(must).then(function(){toast("Question deleted");tContent()}).catch(fail)}});
+      });
+    });
+  }
+  function qList(qs,showKind){
+    if(!qs.length)return '<p class="muted" style="margin-bottom:10px">No questions yet.</p>';
+    return '<div class="tbl"><table><thead><tr>'+(showKind?'<th>Type</th>':'')+'<th>Question</th><th>Options (correct in bold)</th><th></th></tr></thead><tbody>'+qs.map(function(x){return '<tr>'+(showKind?'<td><span class="pill p-soft">'+x.quiz_kind+(x.track_id?" · "+esc(tname(x.track_id)):"")+'</span></td>':'')+'<td>'+esc(x.prompt)+'</td><td>'+(x.options||[]).map(function(o,i){return i===x.correct_index?'<b>'+esc(o)+'</b>':esc(o)}).join(" · ")+'</td><td><button class="btn ghost sm" data-qdel="'+x.id+'">Delete</button></td></tr>'}).join("")+'</tbody></table></div>';
+  }
+  function qForm(kind){
+    return '<form class="form qf" data-kind="'+kind+'" style="margin-top:12px;border-top:1px dashed var(--line);padding-top:12px">'+
+      (kind==="shared"?'<label class="f">Type<select name="kind"><option value="aptitude">Aptitude</option><option value="module">Shared module bank</option><option value="final">Final test</option></select></label><label class="f">Final test track<select name="track">'+trackOptions("","All tracks")+'</select></label>':'')+
+      '<label class="f" style="grid-column:1/-1">Question<input name="prompt" required></label><label class="f" style="grid-column:1/-1">Options, one per line<textarea name="options" rows="4" required></textarea></label><label class="f">Correct option number<input name="correct" type="number" min="1" max="10" required></label><button class="btn">Add question</button></form>';
+  }
+
+  sb.auth.getSession().then(function(r){user=r.data.session?r.data.session.user:null;boot()});
+})();
+</script>
+</body>
+</html>
