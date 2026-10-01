@@ -775,7 +775,7 @@ lucide-react/dist/esm/lucide-react.js:
       return sb.auth.getSession().then(function(r){user=r.data&&r.data.session?r.data.session.user:null});
     },
     signedIn:function(){return !!user},
-    sendCode:function(email){return sb.auth.signInWithOtp({email:email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+"/"}}).then(must)},
+    sendCode:function(email){return sb.auth.signInWithOtp({email:email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}}).then(must)},
     verifyCode:function(email,code){return sb.auth.verifyOtp({email:email,token:code,type:"email"}).then(must)},
     load:function(){
       var uid=user.id;
@@ -1083,7 +1083,7 @@ lucide-react/dist/esm/lucide-react.js:
   var view="home";
   function topbar(){
     var tr=M&&M.profile.tracks.length?M.profile.tracks:M?[M.active]:[];
-    var right=M?('<div class="who">'+(M.isAdmin?'<a class="linkbtn" href="/admin/" style="text-decoration:none">Admin</a>':'')+'<span class="av">'+initials(M.profile.name||M.profile.email)+'</span><span class="nm" style="font-weight:700;font-size:14px">'+esc((M.profile.name||"").split(" ")[0])+'</span><button type="button" class="linkbtn" data-act="logout">Log out</button></div>'):'';
+    var right=M?('<div class="who">'+(M.isAdmin?'<a class="linkbtn" href="admin/" style="text-decoration:none">Admin</a>':'')+'<span class="av">'+initials(M.profile.name||M.profile.email)+'</span><span class="nm" style="font-weight:700;font-size:14px">'+esc((M.profile.name||"").split(" ")[0])+'</span><button type="button" class="linkbtn" data-act="logout">Log out</button></div>'):'';
     return '<header class="top"><div class="top-in"><a class="logo" href="#home"><img src="'+MARK+'" alt=""><b>First</b><span>Salary</span></a>'+(MODE==="demo"?'<span class="tag">Preview</span>':'')+'<span class="grow"></span>'+
       (M&&M.step>=4?'<label class="trk"><span class="lbl">Track</span><select id="fsd-track" aria-label="Active track">'+tr.map(function(t){return '<option value="'+t+'"'+(t===M.active?" selected":"")+'>'+esc(tname(t))+'</option>'}).join("")+'</select></label>':'')+right+'</div></header>';
   }

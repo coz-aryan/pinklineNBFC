@@ -74,7 +74,7 @@ tr.click{cursor:pointer}tr.click:hover td{background:#FFF8F2}
 </style>
 </head>
 <body>
-<header class="top"><div class="top-in"><a class="logo" href="/">First <span>Salary</span></a><span class="tag">Admin</span><span class="grow"></span><span id="who" class="muted"></span><button class="linkbtn" id="logout" hidden>Log out</button></div></header>
+<header class="top"><div class="top-in"><a class="logo" href="../">First <span>Salary</span></a><span class="tag">Admin</span><span class="grow"></span><span id="who" class="muted"></span><button class="linkbtn" id="logout" hidden>Log out</button></div></header>
 <div id="app" class="wrap"><p class="muted">Loading…</p></div>
 <script src="../assets/supabase.js"></script>
 <script>
@@ -102,7 +102,7 @@ tr.click{cursor:pointer}tr.click:hover td{background:#FFF8F2}
       (auth.sent?'<button type="button" class="linkbtn" id="back">Use a different email</button>':'')+'</form></div></div>';
     document.getElementById("auth").onsubmit=function(e){e.preventDefault();auth.err="";auth.busy=true;
       if(!auth.sent){auth.email=document.getElementById("email").value.trim();vLogin();
-        sb.auth.signInWithOtp({email:auth.email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+"/admin/"}}).then(must).then(function(){auth.sent=true;auth.busy=false;vLogin()}).catch(function(err){auth.busy=false;auth.err=err.message;vLogin()})}
+        sb.auth.signInWithOtp({email:auth.email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}}).then(must).then(function(){auth.sent=true;auth.busy=false;vLogin()}).catch(function(err){auth.busy=false;auth.err=err.message;vLogin()})}
       else{var c=document.getElementById("code").value.trim();vLogin();
         sb.auth.verifyOtp({email:auth.email,token:c,type:"email"}).then(must).then(function(){auth.busy=false}).catch(function(err){auth.busy=false;auth.err=err.message;vLogin()})}};
     var b=document.getElementById("back");if(b)b.onclick=function(){auth.sent=false;vLogin()};
